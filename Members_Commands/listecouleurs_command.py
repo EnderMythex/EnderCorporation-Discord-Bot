@@ -1,4 +1,8 @@
+# ------------------------------------------------ IMPORT / LIBRARY -------------------------------------------------
+
 import discord
+
+# -------------------------------------------------- COMMAND ----------------------------------------------------------
 
 async def listecouleurs_command(interaction: discord.Interaction):
         # Liste des couleurs disponibles

@@ -1,4 +1,9 @@
+
+# ------------------------------------------------ IMPORT / LIBRARY -------------------------------------------------
+
 import discord
+
+# -------------------------------------------------- COMMAND ----------------------------------------------------------
 
 async def join_command(interaction: discord.Interaction):
         # Vérifie si l'utilisateur est dans un canal vocal

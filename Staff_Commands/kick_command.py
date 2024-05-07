@@ -1,9 +1,15 @@
+
+# ------------------------------------------------ IMPORT / LIBRARY -------------------------------------------------
+
 import discord
 import json
+
+# ------------------------------------------------ CONFIG / INTENT -------------------------------------------------
 
 with open('config.json', 'r') as config_file:
     config = json.load(config_file)
 
+# -------------------------------------------------- COMMAND ----------------------------------------------------------
 
 async def kick_command(interaction, member: discord.Member):
     # Vérifie si l'ID de l'utilisateur est dans la liste des utilisateurs autorisés

@@ -1,12 +1,14 @@
+
+# ------------------------------------------------ IMPORT / LIBRARY -------------------------------------------------
+
 import discord
 from discord import app_commands
 from discord.ext import commands
-import youtube_dl
 import datetime
-import random
 import json
-import asyncio
 import aiohttp
+
+# ------------------------------------------------ CONFIG / INTENT -------------------------------------------------
 
 async def fetch_hypixel_uuid(username, api_key):
     url = f"https://api.hypixel.net/find?key={api_key}&name={username}"
@@ -36,7 +38,7 @@ with open('config.json', 'r') as config_file:
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 
-
+# -------------------------------------------------- COMMAND ----------------------------------------------------------
 
 async def hypixelplayer_command(interaction: discord.Interaction, uuid: str):
         api_key = config["hypixel_api_key"]  # Assurez-vous que votre config.json contient votre clé API d'Hypixel

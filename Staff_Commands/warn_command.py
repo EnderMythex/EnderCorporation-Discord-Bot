@@ -1,10 +1,17 @@
+
+# ------------------------------------------------ IMPORT / LIBRARY -------------------------------------------------
+
 import discord
 import json
+
+# ------------------------------------------------ CONFIG / INTENT -------------------------------------------------
 
 with open('config.json', 'r') as config_file:
     config = json.load(config_file)
 
 warnings = {}
+
+# -------------------------------------------------- COMMAND ----------------------------------------------------------
 
 async def warn_command(interaction, user: discord.User, reason: str):
     # Vérifier si l'utilisateur est autorisé

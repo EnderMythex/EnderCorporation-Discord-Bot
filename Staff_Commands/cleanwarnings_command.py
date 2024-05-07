@@ -1,5 +1,10 @@
+
+# ------------------------------------------------ IMPORT / LIBRARY -------------------------------------------------
+
 import discord
 import json
+
+# ------------------------------------------------ CONFIG / INTENT -------------------------------------------------
 
 with open('config.json', 'r') as config_file:
     config = json.load(config_file)
@@ -8,6 +13,8 @@ intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 
 warnings = {}
+
+# -------------------------------------------------- COMMAND ----------------------------------------------------------
 
 async def cleanwarnings_command(interaction, user: discord.User):
     # Vérifie si l'ID de l'utilisateur est dans la liste des utilisateurs autorisés

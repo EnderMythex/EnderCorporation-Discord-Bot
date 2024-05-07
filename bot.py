@@ -29,28 +29,23 @@ intents.voice_states = True
 client = discord.Client(intents=intents)
 client = commands.Bot(command_prefix=commands.when_mentioned_or('+'), help_command=None, intents=discord.Intents.all())
 
-warnings = {}
-
 # ---------------------------------------------- NO PERMS NEED ------------------------------------------------------
 
-@client.tree.command(name="synch", description="[NO PERMS NEEDED ✅] Commands Synch")
-async def sync(ctx):
-        try:
-            synced = await client.tree.sync()
-            print(f"Synced {len(synced)} commands!")
-            await ctx.send(f"Synced {len(synced)} commands!")
-        except Exception as e:
-            print(e)
 
 
-
-
-
-from Members_Commands.test_command import first_command 
+from Members_Commands.test_command import test_command 
 
 @client.tree.command(name="test", description="[NO PERMS NEEDED ✅] Testing command")
 async def test_command_wrapper(interaction):
-    await first_command(interaction) 
+    await test_command(interaction) 
+
+
+
+from Members_Commands.twitter_command import twitter_command
+
+@client.tree.command(name="twitter", description="[NO PERMS NEEDED ✅] Search Twitter profiles by username")
+async def twitter_command_wrapper(interaction, username: str): 
+    await twitter_command(interaction, username)
 
 
 
@@ -105,7 +100,7 @@ async def rps_command_wrapper(interaction: discord.Interaction):
 from Members_Commands.hypixelplayer_command import hypixelplayer_command
 
 @client.tree.command(name="hypixelplayer", description="[NO PERMS NEEDED ✅] Affiche les informations d'un joueur Hypixel")
-async def hypixelplayer_command_wrapper(interaction, uuid: str): 
+async def hypixelplayer_command_wrapper(interaction: discord.Interaction, uuid: str): 
     await hypixelplayer_command(interaction, uuid) 
 
 
@@ -113,6 +108,15 @@ async def hypixelplayer_command_wrapper(interaction, uuid: str):
 
 
 # --------------------------------------------- PERMS ADMIN NEEDED --------------------------------------------------
+
+from Staff_Commands.listeuser_command import listeuser_command
+
+@client.tree.command(name="listeuser", description="[ADMIN NEEDED ⛔] Listen role user")
+async def listeuser_command_wrapper(interaction, role: discord.Role):  # Modifier le paramètre 'user' en 'role'
+    await listeuser_command(interaction, role)  # Modifier l'argument passé à la fonction en 'role'
+
+
+
 
 from Staff_Commands.love_command import love_command
 
@@ -212,7 +216,7 @@ async def createembed_command_wrapper(interaction: discord.Interaction, title: s
 
 
 
-# ------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------ MUSIC COMMAND (TEMP LOCATIONS) -------------------------------------------------
 
 paused = False
 pause_time = 0
@@ -396,110 +400,17 @@ async def play_command(interaction: discord.Interaction, url: str):
         now_playing_embed.add_field(name="Artiste", value=player.artist)
         message = await interaction.followup.send(embed=now_playing_embed, view=MusicControlButtons(interaction))
 
-        
-# -------------------------------------------- ACTIVITY / RPC  ----------------------------------------------------
 
-async def update_presence():
-    while True:
-        # Affiche "Joue à EnderComTY"
-        game = discord.Game("🎮 EnderComTY")
-        await client.change_presence(activity=game)
-        await asyncio.sleep(3)  # Attend 3 secondes
 
-        # Affiche l'heure locale
-        local_time = datetime.datetime.now().strftime("%H:%M:%S")
-        game = discord.Game(f"⏳ Heure locale: {local_time}")
-        await client.change_presence(activity=game)
-        await asyncio.sleep(3)  # Attend 3 secondes
-
-        # Affiche l'heure locale
-        game = discord.Game("💾 Version : V0.0.8")
-        await client.change_presence(activity=game)
-        await asyncio.sleep(3)  # Attend 3 secondes
-
-# -------------------------------------------- LOGS / ONLINE MS  ----------------------------------------------------
+# -------------------------------------------- SYNC  ----------------------------------------------------
 
 @client.command()
 async def sync(ctx):
-        try:
-            synced = await client.tree.sync()
-            print(f"Synced {len(synced)} commands!")
-            await ctx.send(f"Synced {len(synced)} commands!")
-        except Exception as e:
-            print(e)
-
-@client.event
-async def on_ready():
-    client.loop.create_task(update_presence())
-    channel = client.get_channel(1202292341646299236)  # Remplacez ID_DU_CANAL par l'ID réel du canal
-    embed = discord.Embed(
-        title='🟢 Bot Online',
-        description='[Version V0.0.8] Le bot est désormais en ligne.',
-        color=discord.Color.green()
-    )
-    await channel.send(embed=embed)
-
-users_last_message_time = {}
-
-# -------------------------------------------- MP MS / AUTHPING MS  ----------------------------------------------------
-
-@client.event
-async def on_message(message):
-    # Vérifie si le message provient du bot lui-même
-    if message.author == client.user:
-        return  # Ignore les messages du bot lui-même
-
-    # Vérifie si le message est un message privé (DM)
-    if isinstance(message.channel, discord.channel.DMChannel):
-        user_id = message.author.id  # Obtient l'ID de l'utilisateur
-        current_time = datetime.datetime.now()
-
-        # Vérifie si l'utilisateur a déjà reçu un message
-        if user_id in users_last_message_time:
-            time_since_last_message = current_time - users_last_message_time[user_id]
-            if time_since_last_message.total_seconds() < 10:
-                # Si moins de 10 secondes se sont écoulées depuis le dernier message, ne fait rien
-                return
-            else:
-                # Si 10 secondes ou plus se sont écoulées, met à jour le temps
-                users_last_message_time[user_id] = current_time
-                # Attend 10 secondes avant d'envoyer la réponse
-                await asyncio.sleep(10)
-        else:
-            # Si l'utilisateur n'a pas encore reçu de message, enregistre le moment actuel et envoie le message directement
-            users_last_message_time[user_id] = current_time
-
-        # Prépare l'embed
-        embed = discord.Embed(
-            title='🔔 EnderComTY Notifications',
-            description='Hi, Join this server : https://discord.gg/fz2Sr7rBcw',
-            color=discord.Color.yellow()
-        )
-        # Envoie l'embed en réponse dans le DM de l'utilisateur
-        await message.author.send(embed=embed)
-        return
-
-    # Serveur Ender ⬇
-
-    if message.channel.name == '⎝💫⎠free-ugc-roblox':
-        role = discord.utils.get(message.guild.roles, name="Free UGC Limited Game")
-        if role:
-            await message.reply(f'{role.mention} #NEW Free limited !')
-            await message.add_reaction('👍')  # Ajoute l'emoji du pouce levé
-            await message.add_reaction('❤')
-            print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] [SUCCES  ] Message envoyé dans le channel : {message.channel.name} du serveur : {message.guild.name}")
-        else:
-            await message.channel.send('Rôle non trouvé.')
-
-    if message.channel.name == '⎝👒⎠coming-free-ugc-roblox':
-        role = discord.utils.get(message.guild.roles, name="Free UGC Limited Game")
-        if role:
-            await message.reply(f'{role.mention} #NEW Free limited is coming soon !')
-            await message.add_reaction('👍')  # Ajoute l'emoji du pouce levé
-            await message.add_reaction('❤')
-            print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] [SUCCES  ] Message envoyé dans le channel : {message.channel.name} du serveur : {message.guild.name}")
-        else:
-            await message.channel.send('Rôle non trouvé.')
+    try:
+        synced = await client.tree.sync()
+        print(f"Synced {len(synced)} commands!")
+        await ctx.send(f"Synced {len(synced)} commands!")
+    except Exception as e:
+        print(e)
 
 client.run(config["token"])
-

@@ -11,10 +11,12 @@ with open('config.json', 'r') as config_file:
 
 # -------------------------------------------------- COMMAND ----------------------------------------------------------
 
-async def say_command(interaction, message: str):
-    # Vérifie si l'ID de l'utilisateur est dans la liste des utilisateurs autorisés
+async def listeuser_command(interaction, role: discord.Role):
     if str(interaction.user.id) not in config["authorized_users"]:
         await interaction.response.send_message("⚠ Vous n'êtes pas autorisé à exécuter cette commande.", ephemeral=True)
         return
 
-    await interaction.response.send_message(message)
+    members_with_role = [member for member in role.members]
+    member_name = [member.name for member in members_with_role]
+    
+    await interaction.response.send_message(f"Membres avec le rôle {role.name} : ``` \n{'\n'.join(member_name)} ``` ")

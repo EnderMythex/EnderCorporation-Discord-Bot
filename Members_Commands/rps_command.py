@@ -1,3 +1,6 @@
+
+# ------------------------------------------------ IMPORT / LIBRARY -------------------------------------------------
+
 import discord
 import random
 
@@ -6,6 +9,8 @@ class RPSButtons(discord.ui.View):
         super().__init__()
         self.user = user
         self.choice = None
+
+# ------------------------------------------------ CONFIG / INTENT -------------------------------------------------
 
     @discord.ui.button(label="Pierre 🗿", style=discord.ButtonStyle.primary)
     async def pierre(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -27,6 +32,8 @@ class RPSButtons(discord.ui.View):
             return
         self.choice = "ciseaux"
         self.stop()
+
+# -------------------------------------------------- COMMAND ----------------------------------------------------------
 
 async def rps_command(interaction: discord.Interaction):
     view = RPSButtons(user=interaction.user)
