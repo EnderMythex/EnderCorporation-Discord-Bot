@@ -1,0 +1,9 @@
+{
+  "guild_id": "",
+  "authorized_users": ["", ""],
+  "token": "",
+  "ffmpeg_executable_path": "./ffmpeg-master-latest-win64-gpl/bin/ffmpeg.exe",
+  "hypixel_api_key": "",
+  "twitter_api_key": "",
+  "twitter_api_secret_key" : ""
+}
